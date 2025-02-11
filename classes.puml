@@ -1,0 +1,36 @@
+@startuml
+skinparam groupInheritance 1
+set separator none
+package oy.tol.tira {
+  interface Book {
+    +void setSource(String fileName, String ignoreWordsFile)
+    +void countUniqueWords()
+    +void report()
+    +void close()
+    __Methods for testing__
+    +int getUniqueWordCount()
+    +int getTotalWordCount()
+    +String getWordInListAt(int position)
+    +int getWordCountInListAt(int position)
+  }
+  class BookFactory {
+    +{static} Book createBook()
+  }
+  class BookImplementation #pink;line:red
+  Book <|.. BookImplementation
+  note bottom of BookImplementation
+    This is a class you implement in your course project.
+    HashTable in task 08, BST in task 09.
+  end note
+  class CorrectnessTests
+  class PerformanceTests
+  CorrectnessTests ..> BookImplementation : tests
+  PerformanceTests ..> BookImplementation : tests
+  BookFactory ..> BookImplementation : instantiates
+  package test.resources {
+    entity "several book files" <<file>>
+    entity "ignore words file" <<file>>
+  }
+  BookImplementation ..> test.resources : reads
+}
+@enduml
