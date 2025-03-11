@@ -1,0 +1,110 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Test file not given BST
+      id: test-file-not-given-bst
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test file not given BST
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testFilesNotGiven test
+        timeout: 10
+    - name: Test empty book file BST
+      id: test-empty-book-file-bst
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test empty book file BST
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testEmptyBookFile test
+        timeout: 10
+    - name: Test one word book file BST
+      id: test-one-word-book-file-bst
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test one word book file BST
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testOneWordBookFile test
+        timeout: 10
+    - name: Test non-existent book file
+      id: test-non-existent-book-file
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test non-existent book file
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testNonExistentBookFile test
+        timeout: 10
+    - name: Test tiny book file
+      id: test-tiny-book-file
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test tiny book file
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testTinyBookFile test
+        timeout: 10
+    - name: Test small book file BST
+      id: test-small-book-file-bst
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test small book file BST
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testSmallFile test
+        timeout: 10
+    - name: Test sampi russian book file BST
+      id: test-sampi-russian-book-file-bst
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test sampi russian book file BST
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testSapmiRussianFile test
+        timeout: 10
+    - name: Test war peace book file BST
+      id: test-war-peace-book-file-bst
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test war peace book file BST
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testWarPeaceFile test
+        timeout: 10
+    - name: Test bulk book file BST
+      id: test-bulk-book-file-bst
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test bulk book file BST
+        setup-command: mvn compile
+        command: mvn -Dtest=CorrectnessTests#testBulkFile test
+        timeout: 10
+    - name: Performance test BHT
+      id: performance-test-bht
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Performance test BHT
+        setup-command: mvn compile
+        command: mvn -Dtest=PerformanceTests#handleTestFiles test
+        timeout: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-FILE-NOT-GIVEN-BST_RESULTS: "${{steps.test-file-not-given-bst.outputs.result}}"
+        TEST-EMPTY-BOOK-FILE-BST_RESULTS: "${{steps.test-empty-book-file-bst.outputs.result}}"
+        TEST-ONE-WORD-BOOK-FILE-BST_RESULTS: "${{steps.test-one-word-book-file-bst.outputs.result}}"
+        TEST-NON-EXISTENT-BOOK-FILE_RESULTS: "${{steps.test-non-existent-book-file.outputs.result}}"
+        TEST-TINY-BOOK-FILE_RESULTS: "${{steps.test-tiny-book-file.outputs.result}}"
+        TEST-SMALL-BOOK-FILE-BST_RESULTS: "${{steps.test-small-book-file-bst.outputs.result}}"
+        TEST-SAMPI-RUSSIAN-BOOK-FILE-BST_RESULTS: "${{steps.test-sampi-russian-book-file-bst.outputs.result}}"
+        TEST-WAR-PEACE-BOOK-FILE-BST_RESULTS: "${{steps.test-war-peace-book-file-bst.outputs.result}}"
+        TEST-BULK-BOOK-FILE-BST_RESULTS: "${{steps.test-bulk-book-file-bst.outputs.result}}"
+        PERFORMANCE-TEST-BHT_RESULTS: "${{steps.performance-test-bht.outputs.result}}"
+      with:
+        runners: test-file-not-given-bst,test-empty-book-file-bst,test-one-word-book-file-bst,test-non-existent-book-file,test-tiny-book-file,test-small-book-file-bst,test-sampi-russian-book-file-bst,test-war-peace-book-file-bst,test-bulk-book-file-bst,performance-test-bht
